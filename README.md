@@ -25,13 +25,13 @@ Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije 
 # Članovi tima 
 >linkovi/ glavni doprinos
 >Popis članova tima
->Đana Pavić	
->Marko Šarić	
->Dona Weiner	
->Filip Cvjetićanin	
->Tihomir Livaić	
->Mirta Krajačić	
->Tadija Škugor	
+Đana Pavić	
+Marko Šarić	
+Dona Weiner	
+Filip Cvjetićanin	
+Tihomir Livaić	
+Mirta Krajačić	
+Tadija Škugor	
 
 # Kontribucije
 >Pravila ovise o organizaciji tima i su često izdvojena u CONTRIBUTING.md
