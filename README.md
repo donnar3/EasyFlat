@@ -23,7 +23,8 @@ Kratko opisati cilj Vašeg projekta. Vaša motivacija?  (Napomena: odgovor nije 
 
 #Instalcija
 # Članovi tima 
-> Popis članova tima/linkovi/ glavni doprinos
+>linkovi/ glavni doprinos
+>Popis članova tima
 >Đana Pavić	
 >Marko Šarić	
 >Dona Weiner	
