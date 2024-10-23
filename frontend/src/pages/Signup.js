@@ -1,0 +1,119 @@
+import { useState, useEffect } from "react";
+import axios from "axios"
+//U KODU e NIJE ERROR NEGO OBJEKT/ELEMENT
+export default function Upit(){
+
+
+    const [email,setEmail] =useState('')
+    const [poruka,setPoruka] =useState('')
+    const [error,setError] =useState('')
+    const [selectValue,setselectValue] =useState('')
+
+    const [selectData,setselectData] =useState([])
+    const [ime,setIme] =useState('')
+    const [prezime,setPrezime] =useState('')
+
+
+
+    useEffect(()=>{
+        let processsing=true
+        axiosFetchData(processsing)
+        return()=>{processsing=false}
+    },[])
+
+    const fetchData = async(processsing) =>{
+        const option={method:'GET'}
+        await fetch('https://jsonplaceholder.typicode.com/users',option)//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
+        .then(res=>res.json())
+        .then(data=>{
+            if(processsing){//optimizacija
+            setselectData(data)
+        }
+        })
+        .catch(err=>console.log(err))
+    }
+
+
+    const axiosFetchData = async(processsing) =>{
+/*         const options={ //ovo je za post
+            email:email,
+            message:message
+        } */
+        await axios.get('http://localhost:4000/users')//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
+        //.then(res=>res.json()) //nepotrebno za axios
+        .then(res=>{
+            if(processsing){//optimizacija
+            setselectData(res.data)
+        }
+        })
+        .catch(err=>console.log(err))
+    }
+
+
+    const SelectDropdown=()=>{
+        return(
+            <select value={selectValue} onChange={(e)=>setselectValue(e.target.value)}>
+                {
+                    selectData?.map((item,index)=>(
+                        <option value={item.website} key={item.website}>{item.website}</option>
+                    ))
+                }
+            </select>
+        )
+    }
+    const axiosPostData=async()=>{
+        console.log("Prvi")
+
+        console.log(email)
+        console.log("Drugi")
+
+        console.log(selectValue)
+        console.log("Treci")
+
+        console.log(poruka)
+
+        const postData={
+            email: email,
+            website:selectValue,
+            poruka:poruka
+        }
+        console.log("neki ispis")
+        await axios.post('http://localhost:4000/contact',postData)
+        .then(res=>setError(<p className="success">{res.data}</p>))
+    }
+
+
+    const posao=(e)=>{
+        e.preventDefault();
+        console.log(email+' | '+poruka);
+        if(!poruka){setError(<p className="required">Poruka ne smije biti prazna</p>)}
+        else{setError('')}
+        setError('')
+        axiosPostData();
+    }
+    return (
+        <>
+            <h1>FORMA / KONTAKTIRAJTE NAS</h1>
+            <form className="KontaktForma">
+            <label>Ime</label>
+            <input type="text" id="ime" name="ime" value={ime} onChange={(e)=>setIme(e.target.value)}/>
+
+            <label>Prezime</label>
+            <input type="text" id="prezime" name="prezime" value={prezime} onChange={(e)=>setPrezime(e.target.value)}/>
+
+                <label>Email</label>
+                <input type="text" id="email" name="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+
+
+                <label>Koja je tema vaseg upita?</label> 
+                <a>Ovdije ce biti dosupnji stanovi u zgradi preko baze podataka</a>
+                <SelectDropdown/>
+                <label>Poruka</label>
+                <textarea id="poruka" name="poruka" value={poruka} onChange={(e)=>setPoruka(e.target.value)}></textarea>
+                {error}
+                <button type="submit" onClick={posao}>Posalji</button>
+            </form>
+        </>
+    )
+    
+    } 

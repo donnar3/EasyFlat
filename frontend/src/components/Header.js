@@ -5,7 +5,7 @@ export default function Header(){
             <p>Logotip</p>
             <ul>
               <li>
-                <a href="/">Ovo je univerzalno zaglavnje za starnice koje isto tako vodi na home</a>
+                <a href="/home">Ovo je univerzalno zaglavnje za starnice koje isto tako vodi na home</a>
               </li>
               <li>
                 <a href="/contact">Ovo je link koji vodi na kontakt stranicu</a>
