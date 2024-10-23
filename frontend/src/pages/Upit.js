@@ -36,7 +36,7 @@ export default function Upit(){
             email:email,
             message:message
         } */
-        await axios.get('https://jsonplaceholder.typicode.com/users')//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
+        await axios.get('http://localhost:4000/users')//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
         //.then(res=>res.json()) //nepotrebno za axios
         .then(res=>{
             if(processsing){//optimizacija
@@ -58,12 +58,35 @@ export default function Upit(){
             </select>
         )
     }
+    const axiosPostData=async()=>{
+        console.log("Prvi")
+
+        console.log(email)
+        console.log("Drugi")
+
+        console.log(selectValue)
+        console.log("Treci")
+
+        console.log(poruka)
+
+        const postData={
+            email: email,
+            website:selectValue,
+            poruka:poruka
+        }
+        console.log("neki ispis")
+        await axios.post('http://localhost:4000/contact',postData)
+        .then(res=>setError(<p className="success">{res.data}</p>))
+    }
+
 
     const posao=(e)=>{
         e.preventDefault();
         console.log(email+' | '+poruka);
         if(!poruka){setError(<p className="required">Poruka ne smije biti prazna</p>)}
         else{setError('')}
+        setError('')
+        axiosPostData();
     }
     return (
         <>
