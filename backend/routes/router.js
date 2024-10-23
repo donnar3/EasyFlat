@@ -1,87 +1,35 @@
-const express=require('express')
-const router =express.Router()
+const express = require('express');
+const router = express.Router();
+const pool = require('../db'); // Import the pool
 
-router.post('/contact',(req,res)=>{
-    console.log("neki tekst")
-    const{email,website,poruka}=req.body
-    console.log(email+' : '+poruka+' | '+website)
-    res.send("Hvala Vam i LP")
-})
+// Example route to fetch users from the database
+router.get('/users', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM korisnik'); // Replace with your table name
+    res.json(result.rows);
+  } catch (err) {
+    console.log("Keksic");
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
-router.get('/users',(req,res)=>{
-    console.log("TU sam");
-    const userData=[
-        {
-          "id": 1,
-          "name": "Leanne Graham",
-          "username": "Bret",
-          "email": "Sincere@april.biz",
-          "address": {
-            "street": "Kulas Light",
-            "suite": "Apt. 556",
-            "city": "Gwenborough",
-            "zipcode": "92998-3874",
-            "geo": {
-              "lat": "-37.3159",
-              "lng": "81.1496"
-            }
-          },
-          "phone": "1-770-736-8031 x56442",
-          "website": "hildegard.org",
-          "company": {
-            "name": "Romaguera-Crona",
-            "catchPhrase": "Multi-layered client-server neural-net",
-            "bs": "harness real-time e-markets"
-          }
-        },
-        {
-          "id": 2,
-          "name": "Ervin Howell",
-          "username": "Antonette",
-          "email": "Shanna@melissa.tv",
-          "address": {
-            "street": "Victor Plains",
-            "suite": "Suite 879",
-            "city": "Wisokyburgh",
-            "zipcode": "90566-7771",
-            "geo": {
-              "lat": "-43.9509",
-              "lng": "-34.4618"
-            }
-          },
-          "phone": "010-692-6593 x09125",
-          "website": "anastasia.net",
-          "company": {
-            "name": "Deckow-Crist",
-            "catchPhrase": "Proactive didactic contingency",
-            "bs": "synergize scalable supply-chains"
-          }
-        },
-        {
-          "id": 3,
-          "name": "Clementine Bauch",
-          "username": "Samantha",
-          "email": "Nathan@yesenia.net",
-          "address": {
-            "street": "Douglas Extension",
-            "suite": "Suite 847",
-            "city": "McKenziehaven",
-            "zipcode": "59590-4157",
-            "geo": {
-              "lat": "-68.6102",
-              "lng": "-47.0653"
-            }
-          },
-          "phone": "1-463-123-4447",
-          "website": "ramiro.info",
-          "company": {
-            "name": "Romaguera-Jacobson",
-            "catchPhrase": "Face to face bifurcated interface",
-            "bs": "e-enable strategic applications"
-          }
-        }
-      ];
+// Example POST route to insert new data
+router.post('/contact', async (req, res) => {
+  console.log("Received contact data");
 
-      res.send(userData)
-})
-module.exports=router
+  const { email, website, poruka } = req.body;
+  try {
+    const query = 'INSERT INTO your_table_name (email, website, poruka) VALUES ($1, $2, $3) RETURNING *';
+    const values = [email, website, poruka];
+
+    const result = await pool.query(query, values);
+    console.log(`${email} : ${poruka} | ${website}`);
+    res.send("Hvala Vam i LP");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+module.exports = router;

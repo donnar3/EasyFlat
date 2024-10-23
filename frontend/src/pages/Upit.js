@@ -8,7 +8,7 @@ export default function Upit(){
     const [poruka,setPoruka] =useState('')
     const [error,setError] =useState('')
     const [selectData,setselectData] =useState([])
-    const [selectValue,setselectValue] =useState('')
+    const [selectValue,setSelectValue] =useState('')
 
 
 
@@ -47,17 +47,21 @@ export default function Upit(){
     }
 
 
-    const SelectDropdown=()=>{
+
+      const SelectDropdown=()=>{
         return(
-            <select value={selectValue} onChange={(e)=>setselectValue(e.target.value)}>
+            <select value={selectValue} onChange={(e)=>setSelectValue(e.target.value)}>
                 {
-                    selectData?.map((item,index)=>(
-                        <option value={item.website} key={item.website}>{item.website}</option>
+          selectData?.map((item) => (
+            <option value={item.stan_id} key={item.stan_id}>
+              {item.stan_id}
+            </option>
                     ))
                 }
             </select>
         )
     }
+
     const axiosPostData=async()=>{
         console.log("Prvi")
 
