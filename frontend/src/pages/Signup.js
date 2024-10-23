@@ -1,119 +1,114 @@
 import { useState, useEffect } from "react";
-import axios from "axios"
-//U KODU e NIJE ERROR NEGO OBJEKT/ELEMENT
-export default function Upit(){
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
+export default function Upit() {
+    const navigate = useNavigate(); // Initialize useNavigate
+    const [ime, setIme] = useState('');
+    const [prezime, setPrezime] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordAgain, setPasswordAgain] = useState('');
 
-    const [email,setEmail] =useState('')
-    const [poruka,setPoruka] =useState('')
-    const [error,setError] =useState('')
-    const [selectValue,setselectValue] =useState('')
+    
 
-    const [selectData,setselectData] =useState([])
-    const [ime,setIme] =useState('')
-    const [prezime,setPrezime] =useState('')
+    const [poruka, setPoruka] = useState('');
+    const [error, setError] = useState('');
+    const [selectValue, setSelectValue] = useState('');
+    const [selectData, setSelectData] = useState([]);
 
+    useEffect(() => {
+        let processing = true;
+        fetchData(processing);
+        return () => { processing = false; };
+    }, []);
 
-
-    useEffect(()=>{
-        let processsing=true
-        axiosFetchData(processsing)
-        return()=>{processsing=false}
-    },[])
-
-    const fetchData = async(processsing) =>{
-        const option={method:'GET'}
-        await fetch('https://jsonplaceholder.typicode.com/users',option)//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
-        .then(res=>res.json())
-        .then(data=>{
-            if(processsing){//optimizacija
-            setselectData(data)
+    const fetchData = async (processing) => {
+        try {
+            const response = await axios.get('http://localhost:4000/users'); // Adjust to your endpoint
+            if (processing) {
+                setSelectData(response.data);
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Failed to fetch data. Please try again later.');
         }
-        })
-        .catch(err=>console.log(err))
-    }
-
-
-    const axiosFetchData = async(processsing) =>{
-/*         const options={ //ovo je za post
-            email:email,
-            message:message
-        } */
-        await axios.get('http://localhost:4000/users')//OVDIJE CEMO SE KONEKTIRATI NA BAZU PODATAKA U POSTRES SQL
-        //.then(res=>res.json()) //nepotrebno za axios
-        .then(res=>{
-            if(processsing){//optimizacija
-            setselectData(res.data)
-        }
-        })
-        .catch(err=>console.log(err))
-    }
-
+    };
 
     const SelectDropdown=()=>{
         return(
-            <select value={selectValue} onChange={(e)=>setselectValue(e.target.value)}>
+            <select value={selectValue} onChange={(e)=>setSelectValue(e.target.value)}>
                 {
-                    selectData?.map((item,index)=>(
-                        <option value={item.website} key={item.website}>{item.website}</option>
+          selectData?.map((item) => (
+            <option value={item.stan_id} key={item.stan_id}>
+              {item.stan_id}
+            </option>
                     ))
                 }
             </select>
         )
     }
-    const axiosPostData=async()=>{
-        console.log("Prvi")
 
-        console.log(email)
-        console.log("Drugi")
+    const axiosPostData = async () => {
+        const postData = {
+            ime,
+            prezime,
+            email,
+            website: selectValue,
+            poruka,
+        };
 
-        console.log(selectValue)
-        console.log("Treci")
-
-        console.log(poruka)
-
-        const postData={
-            email: email,
-            website:selectValue,
-            poruka:poruka
+        try {
+            const response = await axios.post('http://localhost:4000/register', postData); // Adjust to your endpoint
+            setError(<p className="success">{response.data}</p>);
+        } catch (err) {
+            console.error(err);
+            setError(<p className="error">Registration failed. Please try again.</p>);
         }
-        console.log("neki ispis")
-        await axios.post('http://localhost:4000/contact',postData)
-        .then(res=>setError(<p className="success">{res.data}</p>))
-    }
+    };
 
-
-    const posao=(e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email+' | '+poruka);
-        if(!poruka){setError(<p className="required">Poruka ne smije biti prazna</p>)}
-        else{setError('')}
-        setError('')
+
+        if (password!=passwordAgain) {
+            setError(<p className="required">Sifre moraju biti iste</p>);
+            return;
+        }
+
+        setError('');
         axiosPostData();
-    }
+    };
+    const handleLoginRedirect = () => {
+        navigate('/login'); // Redirect to /login
+    };
     return (
         <>
             <h1>FORMA / KONTAKTIRAJTE NAS</h1>
-            <form className="KontaktForma">
-            <label>Ime</label>
-            <input type="text" id="ime" name="ime" value={ime} onChange={(e)=>setIme(e.target.value)}/>
+            <form className="KontaktForma" onSubmit={handleSubmit}>
+                <label>Ime</label>
+                <input type="text" id="ime" value={ime} onChange={(e) => setIme(e.target.value)} required />
 
-            <label>Prezime</label>
-            <input type="text" id="prezime" name="prezime" value={prezime} onChange={(e)=>setPrezime(e.target.value)}/>
+                <label>Prezime</label>
+                <input type="text" id="prezime" value={prezime} onChange={(e) => setPrezime(e.target.value)} required />
 
                 <label>Email</label>
-                <input type="text" id="email" name="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <label>ID vašeg stana</label>
+
+                <SelectDropdown />
+
+                <label>Password:</label>
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
 
-                <label>Koja je tema vaseg upita?</label> 
-                <a>Ovdije ce biti dosupnji stanovi u zgradi preko baze podataka</a>
-                <SelectDropdown/>
-                <label>Poruka</label>
-                <textarea id="poruka" name="poruka" value={poruka} onChange={(e)=>setPoruka(e.target.value)}></textarea>
-                {error}
-                <button type="submit" onClick={posao}>Posalji</button>
+                <label>Ponovite šifru:</label>
+                <input type="password" value={passwordAgain} onChange={(e) => setPasswordAgain(e.target.value)} required />
+                {error && <div>{error}</div>}
+
+                <button type="submit">Pošalji upit</button>
+
+                <button type="button" onClick={handleLoginRedirect}>Povratak na login</button> {/* Change type to button */}
             </form>
         </>
-    )
-    
-    } 
+    );
+}

@@ -5,6 +5,7 @@ import Upit from '../pages/Upit'
 
 import Home from '../pages/Home';
 import Signup from '../pages/Signup';
+import Login from '../pages/Login';
 
 import Contact from '../pages/Contact';
 import {BrowserRouter,Routes,Route,Outlet} from 'react-router-dom';
@@ -25,7 +26,9 @@ export default function Router(){
                 <Routes>
                   <Route path="/" element={<Layout/>}>
                   <Route path="/" element={<Signup/>}/>
+                  <Route path="signup" element={<Signup/>}/>
 
+                  <Route path="login" element={<Login/>}/>
                   <Route path="home" element={<Home/>}/>
                   <Route path="contact" element={<Contact/>}/>
                   <Route path="upit" element={<Upit/>}/>
