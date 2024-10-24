@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../db'); // Import the pool
+const pool = require('../db'); 
 
-// Example route to fetch users from the database
 router.get('/users', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM korisnik'); // Replace with your table name
+    const result = await pool.query('SELECT * FROM korisnik'); 
     res.json(result.rows);
   } catch (err) {
     console.log("Keksic");
@@ -44,7 +43,7 @@ router.post('/login', async (req, res) => {
 
     console.log(`${email} : ${sifra}`);
     if (!email) {
-      return res.send("Nije upisan email"); // Use return to stop execution here
+      return res.send("Nije upisan email");
     }  
     
     const result = await pool.query(
@@ -52,10 +51,8 @@ router.post('/login', async (req, res) => {
       [email, sifra]
     );
     if (result.rows.length > 0) {
-      // User found
       res.send("Login Uspješan");
     } else {
-      // No user found with the given email and password
       res.status(401).send("Pogrešan email ili sifra.");
     }  } catch (err) {
     console.error(err.message);

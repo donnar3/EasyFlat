@@ -22,7 +22,9 @@ export default function Upit() {
 
     const fetchData = async (processing) => {
         try {
-            const response = await axios.get('http://localhost:4000/users');
+            const response = await axios.get('http://localhost:4000/users', {
+                withCredentials: true, 
+            });
             if (processing) {
                 setSelectData(response.data);
             }
@@ -31,6 +33,7 @@ export default function Upit() {
             setError('Failed to fetch data. Please try again later.');
         }
     };
+    
 
     const SelectDropdown = () => {
         return (
@@ -85,7 +88,7 @@ export default function Upit() {
             }
             const data = await response.json();
     
-            // Use window.location.href for external URLs like Google Auth
+            // EKSTERAL GOOGLE AUTH SAMO TO IMAMO
             window.location.href = data.url; 
         } catch (error) {
             console.error('Error during authentication:', error);

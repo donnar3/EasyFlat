@@ -8,6 +8,10 @@ const isAuthenticated = require('./middleware/auth'); // Import the middleware
 const session = require('express-session');
 
 
+const authentifikacija = require('./routes/authentifikacija');
+
+
+
 class Server {
   constructor(port) {
     this.app = express();
@@ -21,31 +25,30 @@ class Server {
     this.app.use(bodyParser.urlencoded({ extended: false }));
 
     const corsOptions = {
-      origin: '*',
+      origin: 'http://localhost:5000', 
       credentials: true,
-      optionalSuccessStatus: 200
-    };
+      optionsSuccessStatus: 200
+  };
 
     this.app.use(cors(corsOptions));
 
-        // Session middleware configuration
         this.app.use(session({
-          secret: 'your_secret_key', // Replace with a strong secret key
+          secret: 'your_secret_key', // tajna shhh
           resave: false,
           saveUninitialized: false,
           cookie: {
             httpOnly: true,
-            maxAge: 1000 * 60 * 60 * 24 // 1 day (adjust as needed)
+            maxAge: 1000 * 60 * 60 * 24 // 1 day 
           }
         }));
       }
   
 
   setupRoutes() {
-    this.app.use('/', router);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);
-    this.app.use('/protected', isAuthenticated, router);
+    this.app.use('/protected', isAuthenticated, authentifikacija);
+    this.app.use('/', isAuthenticated,router);
 
   }
 
