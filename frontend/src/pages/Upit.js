@@ -75,9 +75,21 @@ export default function Upit() {
             website: selectValue,
             poruka: poruka
         };
-        await axios.post('http://localhost:4000/contact', postData)
-            .then(res => setError(<p className="success">{res.data}</p>));
+        console.log(postData);
+        await axios.post('http://localhost:4000/contact', postData, {
+            withCredentials: true // Send cookies with the request
+        })
+        .then(res => setError(<p className="success">{res.data}</p>))
+        .catch(err => {
+            console.error("Error submitting data:", err); // Log the error
+            if (err.response && err.response.status === 401) {
+                setError(<p className="error">Unauthorized: You must log in first.</p>);
+            } else {
+                setError(<p className="error">Something went wrong. Please try again.</p>);
+            }
+        });
     };
+    
 
     const posao = (e) => {
         e.preventDefault();
