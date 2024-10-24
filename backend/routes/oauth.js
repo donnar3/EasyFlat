@@ -36,8 +36,18 @@ router.get('/', async function(req, res, next) {
 
         // Fetch user data using the access token
         await getUserData(user.access_token);
-        res.status(200).send('User data retrieved successfully.');
-
+        res.status(200).send(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>User Data</title>
+            </head>
+            <body>
+                <h1>User data retrieved successfully!</h1>
+                <img src="https://i1.sndcdn.com/artworks-cWUvXfLtMtIGc9P0-fDFV2g-t1080x1080.png" alt="Your Image" />
+            </body>
+            </html>
+        `);
     } catch (err) {
         console.error('Error during token exchange:', err); // Improved error logging
         res.status(400).send({ error: 'Invalid request', message: err.message });
