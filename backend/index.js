@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const router = require('./routes/router');
 const authRouter = require('./routes/oauth');
 const requestRouter = require('./routes/request');
+const isAuthenticated = require('./middleware/auth'); // Import the middleware
+const session = require('express-session');
 
 
 class Server {
@@ -23,13 +25,27 @@ class Server {
       credentials: true,
       optionalSuccessStatus: 200
     };
+
     this.app.use(cors(corsOptions));
-  }
+
+        // Session middleware configuration
+        this.app.use(session({
+          secret: 'your_secret_key', // Replace with a strong secret key
+          resave: false,
+          saveUninitialized: false,
+          cookie: {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 // 1 day (adjust as needed)
+          }
+        }));
+      }
+  
 
   setupRoutes() {
     this.app.use('/', router);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);
+    this.app.use('/protected', isAuthenticated, router);
 
   }
 
