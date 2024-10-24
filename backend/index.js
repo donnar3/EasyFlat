@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const router = require('./routes/router');
+const authRouter = require('./routes/oauth');
+const requestRouter = require('./routes/request');
+
 
 class Server {
   constructor(port) {
@@ -25,6 +28,9 @@ class Server {
 
   setupRoutes() {
     this.app.use('/', router);
+    this.app.use('/oauth', authRouter);
+    this.app.use('/request', requestRouter);
+
   }
 
   start() {

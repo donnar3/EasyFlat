@@ -45,9 +45,19 @@ router.post('/login', async (req, res) => {
     console.log(`${email} : ${sifra}`);
     if (!email) {
       return res.send("Nije upisan email"); // Use return to stop execution here
-    }    
-    res.send("Hvala Vam i LP");
-  } catch (err) {
+    }  
+    
+    const result = await pool.query(
+      'SELECT * FROM korisnik WHERE email = $1 AND lozinka = $2',
+      [email, sifra]
+    );
+    if (result.rows.length > 0) {
+      // User found
+      res.send("Login Uspješan");
+    } else {
+      // No user found with the given email and password
+      res.status(401).send("Pogrešan email ili sifra.");
+    }  } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
