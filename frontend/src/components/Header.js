@@ -1,9 +1,28 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 export default function Header(){
   
         return(
+
+
           <nav className="nav-bar">
-            <p>Logotip</p>
-            <ul>
+          <div className="nav-left">
+          <Link to="/main">
+            <img src={require('../assets/images/easyflatLogo.png')} alt="EasyFlat Logo" className="logo" />
+        </Link>
+              <p className="brand-name">EasyFlat</p>
+          </div>
+
+          <div className="nav-center">
+              <input type="text" placeholder="Search..." className="search-bar" />
+          </div>
+
+          <div className="nav-right">
+              <img src={require('../assets/images/user.png')} alt="Profile" className="profile-image" />
+          </div>
+
+          <ul>
               <li>
                 <a href="/home">Ovo je univerzalno zaglavnje za starnice koje isto tako vodi na home</a>
               </li>
@@ -20,6 +39,8 @@ export default function Header(){
                 <a href="/login">Ovo je link koji vodi na login za stranicz</a>
               </li>
             </ul>
-          </nav>
+            
+      </nav>
+
         )
         }
