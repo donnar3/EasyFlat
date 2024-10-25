@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const router = require('./routes/router');
 const authRouter = require('./routes/oauth');
 const requestRouter = require('./routes/request');
+const checkAuth = require('./routes/checkAuth');
+
+
+
 const isAuthenticated = require('./middleware/auth'); // Import the middleware
 const session = require('express-session');
 
@@ -45,6 +49,8 @@ class Server {
   
 
   setupRoutes() {
+
+    this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);
     this.app.use('/protected', isAuthenticated, authentifikacija);

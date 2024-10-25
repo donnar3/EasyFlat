@@ -14,6 +14,7 @@ router.get('/users', async (req, res) => {
 });
 
 
+
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
   console.log("Received contact data");
