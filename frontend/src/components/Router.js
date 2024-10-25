@@ -52,18 +52,7 @@ export default function Router() {
           <Route path="signup" element={<Signup />} />
           
           
-          <Route
-            path="login"
-            element={
-              isAuthenticated === null ? (
-                <div>Loading...</div>
-              ) : !isAuthenticated ? (
-                <Login />
-              ) : (
-                <Navigate to="/home" />
-              )
-            }
-          />
+
 
           {/* Protected Routes */}
           <Route
