@@ -37,7 +37,7 @@ router.post('/contact', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  console.log("Primili smo login podatke");
+  console.log("Primili smo login podatke YIPPIE");
 
   const { email, sifra } = req.body;
   try {

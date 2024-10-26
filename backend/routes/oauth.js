@@ -38,7 +38,16 @@ router.get('/', async function (req, res, next) {
     req.session.userName = userData.name;
     req.session.picture = userData.picture;
 
-    res.redirect('http://localhost:5000/home'); 
+
+//query da provjeri ima li baza vec njegove informacije
+
+    //ako nema ide na :
+
+    res.redirect('http://localhost:5000/dodajInfo'); 
+
+
+    //ako ima ide na
+    //    res.redirect('http://localhost:5000/home'); 
 
   } catch (err) {
     console.error('Error during token exchange:', err);
