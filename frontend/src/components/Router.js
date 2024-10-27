@@ -3,7 +3,7 @@ import Footer from './Footer';
 import Upit from '../pages/Upit';
 import Home from '../pages/Home';
 import Signup from '../pages/Signup';
-import Login from '../pages/Login';
+import Main from '../pages/Main';
 import Contact from '../pages/Contact';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -60,6 +60,14 @@ export default function Router() {
             element={
               <PrivateRoute>
                 <Home />
+              </PrivateRoute>
+            }
+          />
+                    <Route
+            path="main"
+            element={
+              <PrivateRoute>
+                <Main />
               </PrivateRoute>
             }
           />

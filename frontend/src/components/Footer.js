@@ -1,6 +1,8 @@
 export default function Footer(){
   
     return(
-<p>Ovo je footer od stranice i moze biti stogod</p>
+        <div class="footer">
+            <p>@EasyFlat FER 2024.</p>
+        </div>
     )
-    }
+}
