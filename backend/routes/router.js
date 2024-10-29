@@ -61,4 +61,20 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/addSignupInfo', async(req,res) => {        //dodavanje korisnika u bazu, bez potvrde administratora
+  try{              
+    const stanovi = req.body.stanovi;       
+    const password = req.body.password;
+    const query = `INSERT INTO ${process.env.TABLE} (ime, prezime, email, password, stanovi, authorized, role)
+                  VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`; 
+    const values = [req.session.name,req.session.surname,'primjer@mail.com',req.body.stanovi,FALSE,'suvlasnik'];
+    const result = await pool.query(query, values);
+    console.log("Korisnik dodan u bazu, ali ne potvrđen od admina");
+    res.send("Hvala na prijavi, admninistrator će u nekoliko dana pregledati i potvrditi prijavu :D");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+})
+
 module.exports = router;
