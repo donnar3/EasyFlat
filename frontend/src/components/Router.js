@@ -59,6 +59,21 @@ export default function Router() {
     return children; // If authenticated and verified, render the children components
   };
 
+  const LoggedRoute = ({ children }) => {
+    if (isAuthenticated === null || isEmailVerified === null) {
+      return <div>Loading...</div>; 
+    }
+
+    console.log(isAuthenticated);
+    console.log("------------------------");
+    console.log(isEmailVerified);
+
+    // Redirect to signup if not authenticated or email is not verified
+    if (isAuthenticated && isEmailVerified) {
+      return <Navigate to="/home" />;
+    }
+    return children; // If authenticated and verified, render the children components
+  };
   const AuthenticatedRoute = ({ children }) => {
     if (isAuthenticated === null) {
       return <div>Loading...</div>;
@@ -71,8 +86,20 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Signup />} />
-          <Route path="signup" element={<Signup />} />
+
+        <Route path="/" element={<Signup />} />
+          
+          
+          <Route 
+          path="signup" 
+          element={
+            <LoggedRoute>
+
+          <Signup />
+          </LoggedRoute>
+
+          } 
+          />
           
           
 

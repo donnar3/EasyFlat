@@ -61,8 +61,16 @@ router.get('/', async function (req, res, next) {
         if (err) {
           console.error("Error destroying session:", err);
         }
-        res.status(400).send("Već ste poslali zahtijev za pristup ovu email adresu. Moći ćete pristupiti sustavu kada vas Administrator mreže odbori."); 
-      });
+        res.status(400).send(`
+          <html>
+            <body>
+              <h1>Već ste poslali zahtijev za pristup ovu email adresu.</h1>
+              <p>Moći ćete pristupiti sustavu kada vas Administrator mreže odbori.</p>
+              <button onclick="window.location.href='http://localhost:5000/home'">Go to Home</button>
+            </body>
+          </html>
+        `);
+              });
     } else {
       res.redirect('http://localhost:5000/potvrda'); // Redirect to dodajInfo if email does not exist
     }
