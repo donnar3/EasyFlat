@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     try {
       // Query the database to check if the email is active
       const result = await pool.query(
-        'SELECT * FROM korisnik WHERE email = $1 AND aktivan = false',
+        'SELECT * FROM korisnik WHERE email = $1 AND aktivan = true',
         [req.session.email]
       );
 

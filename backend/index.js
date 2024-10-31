@@ -6,6 +6,7 @@ const authRouter = require('./routes/oauth');
 const requestRouter = require('./routes/request');
 const checkAuth = require('./routes/checkAuth');
 const podatciKorisnikaSignup = require('./routes/authentifikacija');
+const logout = require('./routes/logout');
 
 
 
@@ -50,7 +51,8 @@ class Server {
   
 
   setupRoutes() {
-    
+    this.app.use('/logout',logout);
+
     this.app.use('/signupAuth',podatciKorisnikaSignup);
 
     this.app.use('/check-auth', checkAuth);

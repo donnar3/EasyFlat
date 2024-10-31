@@ -43,7 +43,16 @@ const AdditionalSignup = () => {
       await axios.post('http://localhost:4000/signupAuth/additional-signup', formData, {
         withCredentials: true
       });
-      navigate('/home'); // Redirect to /home upon successful submission
+      
+      // After sending the data, delete the current session
+      await axios.post('http://localhost:4000/logout', {}, { // Assuming you have a logout endpoint
+        withCredentials: true
+      });
+
+      // Inform the user
+      alert("Your data has been sent for review."); // Display a message to the user
+
+      navigate('/home'); // Redirect to /home after successful submission
     } catch (error) {
       console.error("Error during additional signup:", error);
     }

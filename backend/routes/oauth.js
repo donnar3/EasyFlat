@@ -2,13 +2,22 @@
 const express = require('express');
 const router = express.Router();
 const dotenv = require('dotenv');
-dotenv.config();
 const { OAuth2Client } = require('google-auth-library');
 const fetch = require('node-fetch');
+const pool = require('../db'); // Import your database connection
+
+dotenv.config();
 
 async function getUserData(access_token) {
   const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`);
   return response.json();
+}
+
+// Check if the email exists in the database and get its activation status
+async function getEmailStatusInDatabase(email) {
+  const result = await pool.query('SELECT aktivan FROM korisnik WHERE email = $1', [email]);
+  // Return the value of aktivan if email exists, otherwise return null
+  return result.rows.length > 0 ? result.rows[0].aktivan : null; 
 }
 
 // OAuth route handler
@@ -37,19 +46,31 @@ router.get('/', async function (req, res, next) {
     req.session.userName = userData.name;
     req.session.ime = userData.given_name;
     req.session.prezime = userData.family_name;
-
-
     req.session.picture = userData.picture;
     req.session.email = userData.email;  // Storing email in session
 
-    // Conditional redirection based on user information
-    res.redirect(userData.email ? 'http://localhost:5000/home' : 'http://localhost:5000/dodajInfo'); 
+    // Check the email status in the database
+    const emailStatus = await getEmailStatusInDatabase(userData.email);
+
+    // Conditional redirection based on email status
+    if (emailStatus === true) {
+      res.redirect('http://localhost:5000/home'); // Redirect to home if aktivan is true
+    } else if (emailStatus === false) {
+      // Inform user if aktivan is false and delete session
+      req.session.destroy((err) => {
+        if (err) {
+          console.error("Error destroying session:", err);
+        }
+        res.status(400).send("Već ste poslali zahtijev za pristup ovu email adresu. Moći ćete pristupiti sustavu kada vas Administrator mreže odbori."); 
+      });
+    } else {
+      res.redirect('http://localhost:5000/potvrda'); // Redirect to dodajInfo if email does not exist
+    }
 
   } catch (err) {
     console.error('Error during token exchange:', err);
     res.redirect('http://localhost:5000/error');
   }
 });
-
 
 module.exports = router;
