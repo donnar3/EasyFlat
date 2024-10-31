@@ -5,10 +5,11 @@ const router = require('./routes/router');
 const authRouter = require('./routes/oauth');
 const requestRouter = require('./routes/request');
 const checkAuth = require('./routes/checkAuth');
+const podatciKorisnikaSignup = require('./routes/authentifikacija');
 
 
 
-const isAuthenticated = require('./middleware/auth'); // Import the middleware
+const { isAuthenticated, isVerifiedUser } = require('./middleware/auth');
 const session = require('express-session');
 
 
@@ -49,11 +50,15 @@ class Server {
   
 
   setupRoutes() {
+    
+    this.app.use('/signupAuth',podatciKorisnikaSignup);
 
     this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);
-    this.app.use('/protected', isAuthenticated, authentifikacija);
+    router.get('/protected', isAuthenticated, isVerifiedUser, (req, res) => {
+      res.send({ message: 'You are authenticated and verified!' });
+    });
     this.app.use('/', isAuthenticated,router);
 
   }
