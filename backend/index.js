@@ -61,6 +61,9 @@ class Server {
     router.get('/protected', isAuthenticated, isVerifiedUser, (req, res) => {
       res.send({ message: 'You are authenticated and verified!' });
     });
+
+
+    
     this.app.use('/', isAuthenticated,router);
 
   }

@@ -17,7 +17,6 @@ router.get('/', isAuthenticated, (req, res) => {
             userId: req.session.userId,
             imeKorisnika: req.session.ime,
             prezimeKorisnika: req.session.prezime,
-
             userName: req.session.userName,
             email:req.session.email,
             picture: req.session.picture
