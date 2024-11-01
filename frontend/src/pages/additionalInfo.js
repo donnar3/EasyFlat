@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const AdditionalSignup = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     apartmentNumber: ''
   });
+  const [selectData, setSelectData] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Fetch user data for initial form population
     const fetchUserData = async () => {
       try {
         const response = await axios.get('http://localhost:4000/signupAuth', {
@@ -22,19 +25,37 @@ const AdditionalSignup = () => {
           firstName: imeKorisnika || '',
           lastName: prezimeKorisnika || '',
           email: email || '',
-          apartmentNumber: ''
+          apartmentNumber: ''  // Leave apartmentNumber empty initially
         });
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
 
+    // Fetch apartment list for the dropdown
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/users', {
+          withCredentials: true,
+        });
+        setSelectData(response.data);
+      } catch (err) {
+        console.error("Error fetching apartment data:", err);
+        setError('Failed to fetch apartment data. Please try again later.');
+      }
+    };
+
     fetchUserData();
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSelectChange = (e) => {
+    setFormData((prevData) => ({ ...prevData, apartmentNumber: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -43,14 +64,12 @@ const AdditionalSignup = () => {
       await axios.post('http://localhost:4000/signupAuth/additional-signup', formData, {
         withCredentials: true
       });
-      
+
+      // Log out and inform user
       await axios.post('http://localhost:4000/logout', {}, {
         withCredentials: true
       });
-
-      // Inform the user
-      alert("Your data has been sent for review."); 
-
+      alert("Your data has been sent for review.");
       navigate('/home');
     } catch (error) {
       console.error("Error during additional signup:", error);
@@ -75,10 +94,18 @@ const AdditionalSignup = () => {
         </div>
         <div>
           <label>Apartment Number:</label>
-          <input type="text" name="apartmentNumber" value={formData.apartmentNumber} onChange={handleChange} required />
+          <select value={formData.apartmentNumber} onChange={handleSelectChange} required>
+            <option value="">Select Apartment</option>
+            {selectData.map((item) => (
+              <option value={item.stan_id} key={item.stan_id}>
+                {item.stan_id}
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit">Complete Signup</button>
       </form>
+      {error && <p className="error">{error}</p>}
     </div>
   );
 };
