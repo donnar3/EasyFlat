@@ -44,15 +44,14 @@ const AdditionalSignup = () => {
         withCredentials: true
       });
       
-      // After sending the data, delete the current session
-      await axios.post('http://localhost:4000/logout', {}, { // Assuming you have a logout endpoint
+      await axios.post('http://localhost:4000/logout', {}, {
         withCredentials: true
       });
 
       // Inform the user
-      alert("Your data has been sent for review."); // Display a message to the user
+      alert("Your data has been sent for review."); 
 
-      navigate('/home'); // Redirect to /home after successful submission
+      navigate('/home');
     } catch (error) {
       console.error("Error during additional signup:", error);
     }
