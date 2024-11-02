@@ -15,6 +15,22 @@ router.get('/users', async (req, res) => {
 });
 
 
+// Ruta za dohvacanje posljednje objavljenih diskusija.
+router.get('/allDiscussions', async function (req, res){
+  try {
+
+      // Kreiraj i napuni listu s posljednjim diskusijama.
+      let discussionList = [];
+      discussionList.push({"exampleProp": "someValue"});
+
+      // Posalji listu u json formatu.
+      res.json(discussionList);
+  } catch (err) {
+      console.log("erro in /allDiscussions");
+      res.status(500).send('Server Error');
+  }
+});
+
 
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
@@ -78,5 +94,7 @@ router.post('/login', async (req, res) => {
   }
 })
 */
+
+
 
 module.exports = router;
