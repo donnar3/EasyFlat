@@ -5,6 +5,7 @@ const pool = require('../db');
 router.get('/users', async (req, res) => {
   try {
     const result = await pool.query('SELECT stan_id from stan WHERE zauzet = FALSE'); 
+    console.log(result);
     res.json(result.rows);
   } catch (err) {
     console.log("Keksic");
