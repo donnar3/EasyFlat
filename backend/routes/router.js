@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/addSignupInfo', async(req,res) => {        //dodavanje korisnika u bazu, bez potvrde administratora
+/*router.post('/addSignupInfo', async(req,res) => {        //dodavanje korisnika u bazu, bez potvrde administratora
   try{              
     const stanovi = req.body.stanovi;       
     const password = req.body.password;
@@ -77,5 +77,6 @@ router.post('/addSignupInfo', async(req,res) => {        //dodavanje korisnika u
     res.status(500).send('Server Error');
   }
 })
+*/
 
 module.exports = router;
