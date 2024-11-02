@@ -21,7 +21,8 @@ router.get('/allDiscussions', async function (req, res){
       // Kreiraj i napuni listu s posljednjim diskusijama.
 
       let discussionList = [];
-      const result = await pool.query('SELECT id, naslov, kreator, opis, datum, br_odgovora FROM diskusija ORDER BY datum DESC LIMIT 10;'); 
+      let brojZatrazenihDiskusija = 10;   // Ovo bi trebalo određivat koliko Discussion-a saljemo. tipa      let brojZatrazenihDiskusija = req.brDis
+      const result = await pool.query('SELECT id, naslov, kreator, opis, datum, br_odgovora FROM diskusija ORDER BY datum DESC LIMIT $1;', [brojZatrazenihDiskusija]); 
 
       discussionList = result.rows;
 
