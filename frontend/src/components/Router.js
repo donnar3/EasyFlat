@@ -25,6 +25,7 @@ export default function Router() {
       // Update both authentication and email verification status
       setIsAuthenticated(response.data.isAuthenticated);
       setIsEmailVerified(response.data.isEmailVerified);
+      
     } catch (error) {
       console.error("Authentication check failed:", error);
       setIsAuthenticated(false); // If there's an error, set as unauthenticated
