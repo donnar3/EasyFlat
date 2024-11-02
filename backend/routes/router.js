@@ -19,8 +19,11 @@ router.get('/allDiscussions', async function (req, res){
   try {
 
       // Kreiraj i napuni listu s posljednjim diskusijama.
+
       let discussionList = [];
-      discussionList.push({"exampleProp": "someValue"});
+      const result = await pool.query('SELECT id, naslov, kreator, opis, datum, br_odgovora FROM diskusija ORDER BY datum DESC LIMIT 10;'); 
+
+      discussionList = result.rows;
 
       // Posalji listu u json formatu.
       res.json(discussionList);
