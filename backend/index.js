@@ -7,7 +7,7 @@ const requestRouter = require('./routes/request');
 const checkAuth = require('./routes/checkAuth');
 const podatciKorisnikaSignup = require('./routes/authentifikacija');
 const logout = require('./routes/logout');
-
+const adminRouter = require('./routes/admin');
 
 
 const { isAuthenticated, isVerifiedUser } = require('./middleware/auth');
@@ -58,6 +58,7 @@ class Server {
     this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);
+    this.app.use('/admin',isAuthenticated,adminRouter);
     router.get('/protected', isAuthenticated, isVerifiedUser, (req, res) => {
       res.send({ message: 'You are authenticated and verified!' });
     });
