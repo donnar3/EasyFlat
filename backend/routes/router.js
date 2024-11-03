@@ -22,9 +22,28 @@ router.get('/allDiscussions', async function (req, res){
 
       let discussionList = [];
       let brojZatrazenihDiskusija = 10;   // Ovo bi trebalo određivat koliko Discussion-a saljemo. tipa      let brojZatrazenihDiskusija = req.brDis
-      const result = await pool.query('SELECT id, naslov, kreator, opis, datum, br_odgovora FROM diskusija ORDER BY datum DESC LIMIT $1;', [brojZatrazenihDiskusija]); 
+      const result = await pool.query('SELECT * FROM diskusija ORDER BY datum DESC LIMIT $1;', [brojZatrazenihDiskusija]); // id, naslov, kreator, opis, datum, br_odgovora
 
-      discussionList = result.rows;
+      // Za svaki result is query-a zapisi trazene stupce u listu za ispis.
+      for (let i = 0; i < result.rowCount; i++) {
+        let nextDiscussion = {};
+        nextDiscussion.id = result.rows[i].id;
+        nextDiscussion.naslov = result.rows[i].naslov;
+        nextDiscussion.kreator = result.rows[i].kreator;
+        nextDiscussion.opis = result.rows[i].opis;
+        nextDiscussion.datum = result.rows[i].datum;
+        nextDiscussion.br_odgovora = result.rows[i].br_odgovora;
+        //nextDiscussion.id_forme = result.rows[i].id_forme;
+        
+        // Ako je pridruzen id_forme dodaj formu u objekt za ispis.
+        if (result.rows[i].id_forme !== null) {
+          let forma = await pool.query('SELECT * FROM glasanje_forma WHERE id = $1', [result.rows[i].id_forme])
+          nextDiscussion.forma = forma.rows[0]; // <------- UREDITI OVAJ OBJEKT!
+        }
+
+        discussionList.push(nextDiscussion);
+      }
+
 
       // Posalji listu u json formatu.
       res.json(discussionList);
