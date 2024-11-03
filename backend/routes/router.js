@@ -13,15 +13,13 @@ router.get('/users', async (req, res) => {
   }
 });
 
-
-// Ruta za dohvacanje posljednje objavljenih diskusija.
+// Ruta za dohvacanje posljednje objavljenih diskusija.       primjer koristenja sa frontenda: file://./../examples/allDiscussionsFetch.js
 router.get('/allDiscussions', async function (req, res){
   try {
 
       // Kreiraj i napuni listu s posljednjim diskusijama.
-
       let discussionList = [];
-      let brojZatrazenihDiskusija = 10;   // Ovo bi trebalo određivat koliko Discussion-a saljemo. tipa      let brojZatrazenihDiskusija = req.brDis
+      let brojZatrazenihDiskusija = req.body.brojZatrazenihDiskusija || 10;   
       const result = await pool.query('SELECT id, naslov, kreator, opis, datum, br_odgovora, id_forme FROM diskusija ORDER BY datum DESC LIMIT $1;', [brojZatrazenihDiskusija]); // id, naslov, kreator, opis, datum, br_odgovora, id_forme
 
       // Za svaki result is query-a zapisi trazene stupce u listu za ispis.
@@ -49,6 +47,7 @@ router.get('/allDiscussions', async function (req, res){
       res.json(discussionList);
   } catch (err) {
       console.log("erro in /allDiscussions");
+      console.log(err.message);
       res.status(500).send('Server Error');
   }
 });
