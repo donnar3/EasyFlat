@@ -22,7 +22,7 @@ router.get('/allDiscussions', async function (req, res){
       let brojZatrazenihDiskusija = req.body.brojZatrazenihDiskusija || 10;   
       const result = await pool.query('SELECT id, naslov, kreator, opis, datum, br_odgovora, id_forme FROM diskusija ORDER BY datum DESC LIMIT $1;', [brojZatrazenihDiskusija]); // id, naslov, kreator, opis, datum, br_odgovora, id_forme
 
-      // Za svaki result is query-a zapisi trazene stupce u listu za ispis.
+      // Za svaki result iz query-a zapisi trazene stupce u listu za ispis.
       for (let i = 0; i < result.rowCount; i++) {
         let nextDiscussion = {};
         nextDiscussion.id = result.rows[i].id;
@@ -35,13 +35,12 @@ router.get('/allDiscussions', async function (req, res){
         
         // Ako je pridruzen id_forme dodaj formu u objekt za ispis.
         if (result.rows[i].id_forme !== null) {
-          let forma = await pool.query('SELECT * FROM glasanje_forma WHERE id = $1', [result.rows[i].id_forme])
-          nextDiscussion.forma = forma.rows[0]; // <------- UREDITI OVAJ OBJEKT!
+          let forma = await pool.query('SELECT naslov, glasova_da, glasova_ne, datum_isteklo FROM glasanje_forma WHERE id = $1', [result.rows[i].id_forme])
+          nextDiscussion.forma = forma.rows[0];
         }
 
         discussionList.push(nextDiscussion);
       }
-
 
       // Posalji listu u json formatu.
       res.json(discussionList);
