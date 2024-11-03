@@ -11,8 +11,9 @@ const adminRouter = require('./routes/admin');
 const dataRouter = require('./routes/data');
 
 
-const { isAuthenticated, isVerifiedUser } = require('./middleware/auth');
+const authMiddleware= require('./middleware/auth');
 const session = require('express-session');
+const pool = require('./db');
 
 
 const authentifikacija = require('./routes/authentifikacija');
@@ -59,15 +60,16 @@ class Server {
     this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);
-    this.app.use('/admin',isAuthenticated,adminRouter);
+    this.app.use('/admin',authMiddleware.isAuthenticated,adminRouter);
     this.app.use('/data', dataRouter);
-    router.get('/protected', isAuthenticated, isVerifiedUser, (req, res) => {
+    this.app.use('/protected', authMiddleware.isAuthenticated, authMiddleware.isVerifiedUser, (req, res) => {
       res.send({ message: 'You are authenticated and verified!' });
     });
+    
 
 
     
-    this.app.use('/', isAuthenticated,router);
+    this.app.use('/', authMiddleware.isAuthenticated,router);
 
   }
 

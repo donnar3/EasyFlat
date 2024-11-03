@@ -1,17 +1,25 @@
 import axios from 'axios';
 
-async function fetchDiscussions(brojZatrazenihDiskusija) {
-  try {
-    const response = await axios.get('/data/allDiscussions', {
-      "brojZatrazenihDiskusija": brojZatrazenihDiskusija,
-    });
+class DiscussionService {
+  constructor() {
+    this.baseUrl = '/data/allDiscussions';
+  }
 
-    const discussions = response.data;
-    console.log(discussions); // Process or display the discussions as needed
-  } catch (error) {
-    console.error("Error fetching discussions:", error);
+  async fetchDiscussions(brojZatrazenihDiskusija) {
+    try {
+      const response = await axios.get(this.baseUrl, {
+        params: { brojZatrazenihDiskusija },
+      });
+
+      const discussions = response.data;
+      console.log(discussions);
+      return discussions;
+    } catch (error) {
+      console.error("Error fetching discussions:", error);
+      throw error;
+    }
   }
 }
 
-// Example usage
-fetchDiscussions(10); // Fetch the 10 most recent discussions
+const discussionService = new DiscussionService();
+discussionService.fetchDiscussions(10); 
