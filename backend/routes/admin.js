@@ -7,7 +7,7 @@ async function isAdmin(req, res, next) {        //provjerava se je li korisnik k
     if (result.rowCount>0){
         next();
     }
-    else res.status(403).send({ message: 'You do not have the permission to view this data.' });
+    else res.status(403).send({ message: 'You do not have the permission to perform this action.' });
 }
 
 router.get('/inactiveUsers', isAdmin, async (req,res) => {          //ruta na koju se šalje upit za popis svih neaktivnih korisnika
@@ -21,6 +21,16 @@ router.get('/inactiveUsers', isAdmin, async (req,res) => {          //ruta na ko
         console.log('Error reading data from database: ', err);
         res.status(500).send({ message: 'Internal server error.' });
     }
-})
+});
+
+router.post('/activateUser', isAdmin, async (req,res) => {      //ruta za aktiviranje korisnika u bazi (prima body.email kao nacin identifikacije)
+    try{
+        const updateQuery = await pool.query('UPDATE korisnik SET aktivan = TRUE WHERE email=$1 RETURNING *',[req.body.email]);
+        console.log(updateQuery.rows[0]);
+    } catch(err){
+        console.log('Error updating database: ', err);
+        res.status(500).send({ message: 'Internal server error.' });
+    }
+});
 
 module.exports = router;
