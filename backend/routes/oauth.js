@@ -78,7 +78,6 @@ class OAuthRoutes {
           `);
         });
       } else {
-        // Redirect to confirmation page if email is not found in the database
         res.redirect('http://localhost:5000/potvrda');
       }
     } catch (err) {
@@ -87,11 +86,9 @@ class OAuthRoutes {
     }
   }
 
-  // Initialize the OAuth route
   initializeRoutes() {
     this.router.get('/', this.handleOAuth.bind(this));
   }
 }
 
-// Export an instance of OAuthRoutes
 module.exports = new OAuthRoutes().router;

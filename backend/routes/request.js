@@ -16,7 +16,6 @@ class OAuthAuthorize {
   }
 
   async handleAuthorization(req, res, next) {
-    // Set response headers
     res.header('Access-Control-Allow-Origin', 'http://localhost:5000');
     res.header('Referrer-Policy', 'no-referrer-when-downgrade');
 

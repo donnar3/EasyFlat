@@ -8,7 +8,6 @@ class AdminRoutes {
     this.initializeRoutes();
   }
 
-  // Middleware to check if the user is an admin
   async isAdmin(req, res, next) {
     try {
       const result = await pool.query(
@@ -26,7 +25,6 @@ class AdminRoutes {
     }
   }
 
-  // Route to get all inactive users
   async getInactiveUsers(req, res) {
     try {
       const result = await pool.query(
@@ -39,7 +37,6 @@ class AdminRoutes {
     }
   }
 
-  // Route to activate a user
   async activateUser(req, res) {
     try {
       const updateQuery = await pool.query(
@@ -57,7 +54,6 @@ class AdminRoutes {
     }
   }
 
-  // Initialize routes and apply the isAdmin middleware where needed
   initializeRoutes() {
     this.router.get('/inactiveUsers', this.isAdmin.bind(this), this.getInactiveUsers.bind(this));
     this.router.post('/activateUser', this.isAdmin.bind(this), this.activateUser.bind(this));

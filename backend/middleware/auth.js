@@ -4,7 +4,7 @@ const pool = require('../db');
 class AuthMiddleware {
   constructor(pool) {
     this.pool = pool;
-    this.isVerifiedUser = this.isVerifiedUser.bind(this); // Bind the method here
+    this.isVerifiedUser = this.isVerifiedUser.bind(this); 
   }
 
   isAuthenticated(req, res, next) {
@@ -44,6 +44,6 @@ class AuthMiddleware {
 }
 
 
-const authMiddleware = new AuthMiddleware(pool); // Instantiate with pool
+const authMiddleware = new AuthMiddleware(pool); 
 
 module.exports = authMiddleware;
