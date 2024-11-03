@@ -2,7 +2,7 @@ import axios from 'axios';
 
 async function fetchDiscussions(brojZatrazenihDiskusija) {
   try {
-    const response = await axios.post('/allDiscussions', {
+    const response = await axios.get('/data/allDiscussions', {
       "brojZatrazenihDiskusija": brojZatrazenihDiskusija,
     });
 
