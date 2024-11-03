@@ -22,7 +22,7 @@ router.get('/allDiscussions', async function (req, res){
 
       let discussionList = [];
       let brojZatrazenihDiskusija = 10;   // Ovo bi trebalo određivat koliko Discussion-a saljemo. tipa      let brojZatrazenihDiskusija = req.brDis
-      const result = await pool.query('SELECT * FROM diskusija ORDER BY datum DESC LIMIT $1;', [brojZatrazenihDiskusija]); // id, naslov, kreator, opis, datum, br_odgovora
+      const result = await pool.query('SELECT id, naslov, kreator, opis, datum, br_odgovora, id_forme FROM diskusija ORDER BY datum DESC LIMIT $1;', [brojZatrazenihDiskusija]); // id, naslov, kreator, opis, datum, br_odgovora, id_forme
 
       // Za svaki result is query-a zapisi trazene stupce u listu za ispis.
       for (let i = 0; i < result.rowCount; i++) {
