@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function ProfPrev({ info }) {
     return (
@@ -49,16 +50,10 @@ export default function KorsninkInfo() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:4000/userInfo', {
-                    method: 'POST', // Use POST method
-                    credentials: 'include' // Include cookies with request
+                const response = await axios.post('http://localhost:4000/userInfo', {}, {
+                    withCredentials: true
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    setInfo(data);
-                } else {
-                    console.error('Failed to fetch user data:', response.statusText);
-                }
+                setInfo(response.data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
