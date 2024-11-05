@@ -1,8 +1,8 @@
 export default function Home(){
 return (
     <>
-        <h1>Login Stranica</h1>
-        <p>Ovdje cemo dodati login innpute kakve su bili napravljeni na figmi</p>
+        <h1>HOME STRANICA</h1>
+        <p>Ovdje CEMO DODATI MAIN, prema kako je dona napravila<br/>Neki message board i voting sustav</p>
     </>
 )
 

@@ -4,7 +4,8 @@ const pool = require('../db');
 
 router.get('/users', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM korisnik'); 
+    const result = await pool.query('SELECT stan_id from stan WHERE zauzet = FALSE'); 
+    console.log(result);
     res.json(result.rows);
   } catch (err) {
     console.log("Keksic");
@@ -12,8 +13,6 @@ router.get('/users', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
-
 
 // Example POST route to insert new data
 router.post('/contact', async (req, res) => {
@@ -60,5 +59,24 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+/*router.post('/addSignupInfo', async(req,res) => {        //dodavanje korisnika u bazu, bez potvrde administratora
+  try{              
+    const stanovi = req.body.stanovi;       
+    const password = req.body.password;
+    const query = `INSERT INTO ${process.env.TABLE} (ime, prezime, email, password, stanovi, authorized, role)
+                  VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`; 
+    const values = [req.session.name,req.session.surname,'primjer@mail.com',req.body.stanovi,FALSE,'suvlasnik'];
+    const result = await pool.query(query, values);
+    console.log("Korisnik dodan u bazu, ali ne potvrđen od admina");
+    res.send("Hvala na prijavi, admninistrator će u nekoliko dana pregledati i potvrditi prijavu :D");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+})
+*/
+
+
 
 module.exports = router;

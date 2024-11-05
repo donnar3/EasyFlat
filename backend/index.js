@@ -5,14 +5,18 @@ const router = require('./routes/router');
 const authRouter = require('./routes/oauth');
 const requestRouter = require('./routes/request');
 const checkAuth = require('./routes/checkAuth');
+const podatciKorisnikaSignup = require('./routes/authentifikacija');
+const logout = require('./routes/logout');
+const adminRouter = require('./routes/admin');
+const dataRouter = require('./routes/data');
+const SLANJEPODATAKANAFRONTEND = require('./routes/SENDDATATOFRONTEND');
 
 
-
-const isAuthenticated = require('./middleware/auth'); // Import the middleware
+const authMiddleware= require('./middleware/auth');
 const session = require('express-session');
+const pool = require('./db');
 
 
-const authentifikacija = require('./routes/authentifikacija');
 
 
 
@@ -49,12 +53,23 @@ class Server {
   
 
   setupRoutes() {
+    this.app.use('/logout',logout);
 
+    this.app.use('/signupAuth',podatciKorisnikaSignup);
+    this.app.use('/userInfo',SLANJEPODATAKANAFRONTEND);
     this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);
-    this.app.use('/protected', isAuthenticated, authentifikacija);
-    this.app.use('/', isAuthenticated,router);
+    this.app.use('/admin',authMiddleware.isAuthenticated,adminRouter);
+    this.app.use('/data', dataRouter);
+    this.app.use('/protected', authMiddleware.isAuthenticated, authMiddleware.isVerifiedUser, (req, res) => {
+      res.send({ message: 'You are authenticated and verified!' });
+    });
+    
+
+
+    
+    this.app.use('/', authMiddleware.isAuthenticated,router);
 
   }
 

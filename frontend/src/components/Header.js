@@ -19,8 +19,11 @@ export default function Header(){
           </div>
 
           <div className="nav-right">
-              <img src={require('../assets/images/user.png')} alt="Profile" className="profile-image" />
-          </div>
+      <a href="/korisnikinfo">  
+        <img src={require('../assets/images/user.png')} alt="Profile" className="profile-image" />
+    </a>
+</div>
+
 
           <ul>
               <li>
@@ -35,9 +38,7 @@ export default function Header(){
               <li>
                 <a href="/signup">Ovo je link koji vodi na signup za stranicz</a>
               </li>
-              <li>
-                <a href="/login">Ovo je link koji vodi na login za stranicz</a>
-              </li>
+
             </ul>
             
       </nav>

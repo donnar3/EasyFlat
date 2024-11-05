@@ -7,33 +7,21 @@ export default function Upit() {
     const [error, setError] = useState('');
     const [selectData, setSelectData] = useState([]);
     const [selectValue, setSelectValue] = useState('');
-    const [protectedData, setProtectedData] = useState(null); // State to store protected data
+    const [protectedData, setProtectedData] = useState(null);
 
     useEffect(() => {
         let processing = true;
         axiosFetchData(processing);
-        fetchProtectedData(); // Fetch protected data on mount
+        fetchProtectedData();
         return () => { processing = false; }
     }, []);
-
-    const fetchData = async (processing) => {
-        const option = { method: 'GET' };
-        await fetch('https://jsonplaceholder.typicode.com/users', option)
-            .then(res => res.json())
-            .then(data => {
-                if (processing) {
-                    setSelectData(data);
-                }
-            })
-            .catch(err => console.log(err));
-    };
 
     const axiosFetchData = async (processing) => {
         try {
             const response = await axios.get('http://localhost:4000/users', {
-                withCredentials: true, // kookie se salje 
+                withCredentials: true,
             });
-    
+
             if (processing) {
                 setSelectData(response.data);
             }
@@ -41,7 +29,6 @@ export default function Upit() {
             console.log(err);
         }
     };
-    
 
     const fetchProtectedData = async () => {
         try {
@@ -51,7 +38,6 @@ export default function Upit() {
             setProtectedData(response.data);
         } catch (error) {
             console.error("Error fetching protected data:", error);
-            // Handle error 
         }
     };
 
@@ -75,13 +61,12 @@ export default function Upit() {
             website: selectValue,
             poruka: poruka
         };
-        console.log(postData);
         await axios.post('http://localhost:4000/contact', postData, {
-            withCredentials: true // Send cookies with the request
+            withCredentials: true
         })
         .then(res => setError(<p className="success">{res.data}</p>))
         .catch(err => {
-            console.error("Error submitting data:", err); // Log the error
+            console.error("Error submitting data:", err);
             if (err.response && err.response.status === 401) {
                 setError(<p className="error">Unauthorized: You must log in first.</p>);
             } else {
@@ -89,7 +74,6 @@ export default function Upit() {
             }
         });
     };
-    
 
     const posao = (e) => {
         e.preventDefault();
@@ -104,15 +88,19 @@ export default function Upit() {
     return (
         <>
             <h1>FORMA / KONTAKTIRAJTE NAS</h1>
-            <form className="KontaktForma">
+            <form className="KontaktForma" onSubmit={posao}>
                 <label>Email</label>
-                <input type="text" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="text" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                
                 <label>Koja je tema vaseg upita?</label>
                 <SelectDropdown />
+                
                 <label>Poruka</label>
-                <textarea id="poruka" name="poruka" value={poruka} onChange={(e) => setPoruka(e.target.value)}></textarea>
+                <textarea id="poruka" name="poruka" value={poruka} onChange={(e) => setPoruka(e.target.value)} required></textarea>
+                
                 {error}
-                <button type="submit" onClick={posao}>Posalji</button>
+                
+                <button type="submit">Posalji</button>
             </form>
 
             {protectedData && (
