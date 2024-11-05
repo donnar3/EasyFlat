@@ -19,8 +19,11 @@ export default function Header(){
           </div>
 
           <div className="nav-right">
-              <img src={require('../assets/images/user.png')} alt="Profile" className="profile-image" />
-          </div>
+      <a href="/korisnikinfo">  
+        <img src={require('../assets/images/user.png')} alt="Profile" className="profile-image" />
+    </a>
+</div>
+
 
           <ul>
               <li>

@@ -9,6 +9,7 @@ const podatciKorisnikaSignup = require('./routes/authentifikacija');
 const logout = require('./routes/logout');
 const adminRouter = require('./routes/admin');
 const dataRouter = require('./routes/data');
+const SLANJEPODATAKANAFRONTEND = require('./routes/SENDDATATOFRONTEND');
 
 
 const authMiddleware= require('./middleware/auth');
@@ -16,7 +17,6 @@ const session = require('express-session');
 const pool = require('./db');
 
 
-const authentifikacija = require('./routes/authentifikacija');
 
 
 
@@ -56,7 +56,7 @@ class Server {
     this.app.use('/logout',logout);
 
     this.app.use('/signupAuth',podatciKorisnikaSignup);
-
+    this.app.use('/userInfo',SLANJEPODATAKANAFRONTEND);
     this.app.use('/check-auth', checkAuth);
     this.app.use('/oauth', authRouter);
     this.app.use('/request', requestRouter);

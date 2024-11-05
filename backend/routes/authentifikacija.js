@@ -24,7 +24,8 @@ class UserRoutes {
         prezimeKorisnika: req.session.prezime,
         userName: req.session.userName,
         email: req.session.email,
-        picture: req.session.picture
+        picture: req.session.picture,
+        stanBr:req.session.stanBr,
       } 
     });
   }
@@ -45,11 +46,11 @@ class UserRoutes {
         RETURNING *;
       `;
       const result = await pool.query(insertQuery, [firstName, lastName, 'test', email, apartmentNumber, false]);
-
+      console.log("podatci---------------------------------"+apartmentNumber);
       req.session.ime = firstName;
       req.session.prezime = lastName;
       req.session.email = email;
-
+      req.session.stanBr=apartmentNumber;
       res.json({
         message: 'User data successfully stored in the database.',
         user: result.rows[0]

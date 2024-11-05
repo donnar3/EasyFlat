@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import KontaktDetalji from '../pages/KontaktDetalji';
 import PotvrdaSignupa from '../pages/additionalInfo';
-
+import UserPage from '../pages/KorisnikInfo';
 
 export default function Router() {
   const [isAuthenticated, setIsAuthenticated] = useState(null); // Initialize as null to track loading state
@@ -161,7 +161,7 @@ export default function Router() {
             path="korisnikinfo"
             element={
               <PrivateRoute>
-                <KorisnikInfo />
+                <UserPage />
               </PrivateRoute>
             }
           />

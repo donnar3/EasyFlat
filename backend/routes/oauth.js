@@ -24,7 +24,10 @@ class OAuthRoutes {
     const result = await pool.query('SELECT aktivan FROM korisnik WHERE email = $1', [email]);
     return result.rows.length > 0 ? result.rows[0].aktivan : null;
   }
-
+  async getStanBr(email) {
+    const result = await pool.query('SELECT stan_id FROM korisnik WHERE email = $1', [email]);
+    return result.rows.length > 0 ? result.rows[0].stan_id  : null;
+  }
   // OAuth route handler
   async handleOAuth(req, res) {
     const code = req.query.code;
@@ -54,7 +57,8 @@ class OAuthRoutes {
       req.session.prezime = userData.family_name;
       req.session.picture = userData.picture;
       req.session.email = userData.email;
-
+      req.session.stanBr= await this.getStanBr(userData.email);
+      console.log("ovo je u oauth"+ req.session.stanBr);
       // Check the activation status of the email
       const emailStatus = await this.getEmailStatusInDatabase(userData.email);
 
