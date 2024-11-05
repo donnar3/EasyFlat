@@ -283,3 +283,77 @@ button:hover {
   justify-content: space-between;
 
 }
+
+/*Styles za stranicu profila*/
+
+#contain {
+  height: 100%;
+  background-image: url('./assets/images/LC_hephaistos.jpg');
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  font-size: 1.5em;
+}
+
+#card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  width: 25%;
+  max-width: 460px;
+  max-height: 640px;
+}
+
+#data {
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  width: 50%;
+  max-width:  850px;
+  max-height: 640px;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: 
+      "title title"
+      "a b"
+      "c d"
+      "e f"
+      "g h"
+      "j k"
+      "l m"
+      "n o";
+      align-items: center;
+}
+
+#title {
+  font-size: 2em;
+  grid-area: title;
+}
+
+#status {
+  font-size: 1.5em;
+  border-bottom: 5px solid #4CAF50;
+}
+
+#card img{
+  align-self: center;
+  padding: 10px;
+  max-width: 85%;
+  max-height: 55%;
+}
+
+.uredi{
+  align-self: end;
+  height: 70%;
+  background-color: #4CAF50;
+  border-radius: 20px;
+  color: white;
+  align-content: center;
+  font-size: 1em;
+}

@@ -157,6 +157,14 @@ export default function Router() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="korisnikinfo"
+            element={
+              <PrivateRoute>
+                <KorisnikInfo />
+              </PrivateRoute>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
